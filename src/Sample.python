@@ -1,0 +1,64 @@
+from nltk.corpus import stopwords
+from nltk.tokenize import sent_tokenize, word_tokenize
+from nltk.tokenize import TweetTokenizer
+import nltk
+
+inputFile="../resources/aptavani-01"
+wordsDict={}
+stop_words = set(stopwords.words('english'))
+
+def word_count():
+    with open(inputFile, 'r') as input:
+        for line in input:
+            line = line.split(" ")
+            for word in line:
+                word = word.lower()
+                word = word.strip("\n")
+                word = word.strip(":")
+                word = word.strip(",")
+                word = word.strip("'")
+                word = word.strip("?")
+                word = word.strip(".")
+                word = word.strip(" ")
+                word = word.strip("")
+                if word not in stop_words:
+                    if word in wordsDict:
+                        wordsDict[word]+=1
+                    else:
+                        wordsDict[word]=1
+    res = list(sorted(wordsDict, key=wordsDict.__getitem__, reverse=True))
+    for word in res:
+        print (word,wordsDict[word])
+
+#word_count()
+keyword =["intellect","ego","karma","liberation","gnani","soul"]
+#keyword =["gnan","gna  ni","knowledge","awakened"]
+
+f=open(inputFile,'rU')
+text = f.read().decode('utf8')
+text = text.split("\n")
+for paragraph in text:
+    word_paragraph = paragraph.split(" ")
+    if len(word_paragraph) > 0:
+        keyword_dict={}
+        for word in word_paragraph:
+            if word in keyword:
+                if word in keyword_dict:
+                    keyword_dict[word]+=1
+                else:
+                    keyword_dict[word]=1
+
+        if len(keyword_dict.keys()) > 1:
+            print keyword_dict
+
+
+def concordance():
+    f=open(inputFile,'rU')
+    text = f.read().decode('utf8')
+    tokens = word_tokenize(text)
+    text = nltk.Text(tokens)
+    print text.concordance("one")
+    # pos_text = nltk.pos_tag(text)
+    # for word in pos_text:
+    #     print (word)
+
